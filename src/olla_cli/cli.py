@@ -20,6 +20,7 @@ from .command_implementations import (
     CommandImplementations, DetailLevel, ReviewFocus, RefactorType,
     ProgressIndicator, TemplateManager
 )
+from .formatter_factory import FormatterFactory
 
 
 @click.group()
@@ -27,8 +28,11 @@ from .command_implementations import (
 @click.option('--temperature', '-t', type=float, help='Override temperature setting (0.0-1.0)')
 @click.option('--context-length', '-c', type=int, help='Override context length')
 @click.option('--verbose', '-v', is_flag=True, help='Enable verbose output')
+@click.option('--theme', type=click.Choice(['dark', 'light', 'auto']), help='Output theme')
+@click.option('--no-color', is_flag=True, help='Disable colored output')
 @click.pass_context
-def main(ctx, model: Optional[str], temperature: Optional[float], context_length: Optional[int], verbose: bool):
+def main(ctx, model: Optional[str], temperature: Optional[float], context_length: Optional[int], 
+         verbose: bool, theme: Optional[str], no_color: bool):
     """Olla CLI - A coding assistant command line tool.
     
     Use Olla CLI to explain, review, refactor, debug, generate, test, and document code
@@ -72,6 +76,19 @@ def main(ctx, model: Optional[str], temperature: Optional[float], context_length
         ctx.obj['context_length'] = context_length
     else:
         ctx.obj['context_length'] = config.get('context_length')
+    
+    # Store formatting options
+    ctx.obj['theme'] = theme
+    ctx.obj['no_color'] = no_color
+    
+    # Create formatter
+    formatter_options = {}
+    if theme:
+        formatter_options['theme_override'] = theme
+    if no_color:
+        formatter_options['syntax_highlight'] = False
+    
+    ctx.obj['formatter'] = FormatterFactory.create_formatter(config, **formatter_options)
 
 
 @main.command()

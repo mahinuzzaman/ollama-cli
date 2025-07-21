@@ -33,6 +33,9 @@ setup(
         "aiohttp>=3.8.0",
         "prompt_toolkit>=3.0.0",
         "pygments>=2.0.0",
+        "rich>=13.0.0",
+        "pyperclip>=1.8.0",
+        "markdown>=3.4.0",
     ],
     entry_points={
         "console_scripts": [

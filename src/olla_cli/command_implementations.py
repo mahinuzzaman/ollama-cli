@@ -17,6 +17,7 @@ from .utils import MessageBuilder, ResponseFormatter, TokenCounter
 from .exceptions import (
     OllamaConnectionError, ModelNotFoundError, ContextLimitExceededError
 )
+from .formatter_factory import FormatterFactory
 
 
 logger = logging.getLogger('olla-cli')
@@ -239,10 +240,11 @@ class CommandImplementations:
     """Core command implementations."""
     
     def __init__(self, client: OllamaClient, model_manager: ModelManager, 
-                 context_manager: ContextManager):
+                 context_manager: ContextManager, formatter=None):
         self.client = client
         self.model_manager = model_manager
         self.context_manager = context_manager
+        self.formatter = formatter or FormatterFactory.create_formatter()
     
     def explain_code(
         self,

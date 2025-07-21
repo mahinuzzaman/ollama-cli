@@ -32,6 +32,16 @@ class Config:
             "temperature": 0.7,
             "context_length": 4096,
             "api_url": "http://localhost:11434",
+            "output": {
+                "theme": "dark",
+                "syntax_highlight": True,
+                "show_line_numbers": True,
+                "wrap_text": True,
+                "show_progress": True,
+                "enable_pager": True,
+                "max_width": None,
+                "custom_colors": {}
+            }
         }
         
         self.config_dir.mkdir(parents=True, exist_ok=True)

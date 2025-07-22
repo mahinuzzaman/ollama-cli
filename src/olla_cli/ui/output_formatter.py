@@ -46,7 +46,7 @@ from pygments.lexers import get_lexer_by_name, guess_lexer_for_filename, ClassNo
 from pygments.formatters import HtmlFormatter
 from pygments.util import ClassNotFound as PygmentsClassNotFound
 
-from .config import Config
+from ..config import Config
 
 logger = logging.getLogger('olla-cli')
 

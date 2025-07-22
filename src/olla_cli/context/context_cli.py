@@ -5,7 +5,7 @@ from pathlib import Path
 import json
 
 from .context_builder import ContextManager, ContextStrategy
-from .utils import format_error_message
+from ..utils import format_error_message
 
 
 @click.group()

@@ -10,14 +10,14 @@ from dataclasses import dataclass
 from enum import Enum
 import logging
 
-from .ollama_client import OllamaClient
-from .model_manager import ModelManager
-from .context_builder import ContextManager, ContextStrategy
-from .utils import MessageBuilder, ResponseFormatter, TokenCounter
-from .exceptions import (
+from ..client import OllamaClient
+from ..client import ModelManager
+from ..context import ContextBuilder as ContextManager, ContextStrategy
+from ..utils import MessageBuilder, ResponseFormatter, TokenCounter
+from ..core import (
     OllamaConnectionError, ModelNotFoundError, ContextLimitExceededError
 )
-from .formatter_factory import FormatterFactory
+from ..ui import FormatterFactory
 
 
 logger = logging.getLogger('olla-cli')

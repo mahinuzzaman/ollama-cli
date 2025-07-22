@@ -12,7 +12,7 @@ from typing import Dict, List, Set, Optional, Union, Tuple, Any
 from enum import Enum
 import logging
 
-from .utils import TokenCounter
+from ..utils import TokenCounter
 
 
 logger = logging.getLogger('olla-cli')

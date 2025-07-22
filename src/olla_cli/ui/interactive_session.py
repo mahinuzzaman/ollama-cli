@@ -9,7 +9,7 @@ from typing import List, Dict, Any, Optional, Tuple
 from dataclasses import dataclass, field, asdict
 import logging
 
-from .utils import TokenCounter
+from ..utils import TokenCounter
 
 logger = logging.getLogger('olla-cli')
 

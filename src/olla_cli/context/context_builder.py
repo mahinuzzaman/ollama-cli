@@ -12,7 +12,7 @@ from .context_manager import (
     LanguageDetector, FileFilter, FileTree, CodeExtractor, FileCache
 )
 from .dependency_graph import DependencyGraph
-from .utils import TokenCounter
+from ..utils import TokenCounter
 
 
 logger = logging.getLogger('olla-cli')

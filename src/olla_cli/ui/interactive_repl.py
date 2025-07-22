@@ -25,12 +25,12 @@ from pygments.formatters import Terminal256Formatter
 from pygments.util import ClassNotFound
 
 from .interactive_session import SessionManager, InteractiveSession, SessionContext
-from .command_implementations import CommandImplementations, DetailLevel, ReviewFocus, RefactorType
-from .ollama_client import OllamaClient
-from .model_manager import ModelManager
-from .context_builder import ContextManager, ContextStrategy
-from .utils import TokenCounter, MessageBuilder, ResponseFormatter, format_error_message
-from .exceptions import OllamaConnectionError, ModelNotFoundError
+from ..commands import CommandImplementations, DetailLevel, ReviewFocus, RefactorType
+from ..client import OllamaClient
+from ..client import ModelManager
+from ..context import ContextBuilder as ContextManager, ContextStrategy
+from ..utils import TokenCounter, MessageBuilder, ResponseFormatter, format_error_message
+from ..core import OllamaConnectionError, ModelNotFoundError
 
 logger = logging.getLogger('olla-cli')
 

@@ -1,7 +1,7 @@
 """Factory for creating OutputFormatter instances with configuration."""
 
 from typing import Optional
-from .config import Config
+from ..config import Config
 from .output_formatter import OutputFormatter, FormatOptions, ThemeType, OutputFormat
 
 

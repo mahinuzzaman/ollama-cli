@@ -9,7 +9,7 @@ import aiohttp
 import ollama
 from ollama import Client as OllamaSDK
 
-from .exceptions import (
+from ..core import (
     OllamaConnectionError, OllamaServerError, ModelNotFoundError, 
     ModelPullError, StreamingError, TimeoutError
 )

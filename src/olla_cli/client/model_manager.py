@@ -6,7 +6,7 @@ from typing import Dict, List, Optional, Any, Tuple
 from dataclasses import dataclass
 
 from .ollama_client import OllamaClient
-from .exceptions import ModelNotFoundError, InvalidModelError, ContextLimitExceededError
+from ..core import ModelNotFoundError, ContextLimitExceededError
 
 
 logger = logging.getLogger('olla-cli')

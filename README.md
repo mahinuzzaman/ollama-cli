@@ -35,11 +35,15 @@ Olla CLI is a powerful command-line interface that brings AI coding assistance d
 - **Ollama**: Latest version ([installation guide](https://ollama.ai))
 - **Operating System**: Linux or Windows with WSL
 
-## 🚀 Quick Start
+## 🚀 Installation
 
-### Installation
+### Method 1: Install from PyPI (Recommended)
 ```bash
-# PyPI coming soon...
+pip install olla-cli
+```
+
+### Method 2: Install from Source
+```bash
 git clone https://github.com/mahinuzzaman/ollama-cli.git
 cd ollama-cli
 pip install -e .
@@ -112,10 +116,6 @@ olla-cli test --framework pytest auth_manager.py
 # Generate docs
 olla-cli document --format google auth_manager.py
 ```
-
-## 🤝 Contributing
-
-We welcome contributions!
 
 ### Quick Development Setup
 ```bash

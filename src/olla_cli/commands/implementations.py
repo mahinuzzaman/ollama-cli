@@ -305,10 +305,12 @@ Focus on:
 - Any potential issues or improvements
 """
         
-        messages = [
-            MessageBuilder.build_system_message(system_prompt),
-            MessageBuilder.build_user_message(user_content)
-        ]
+        messages = (
+            MessageBuilder()
+            .add_system_message(system_prompt)
+            .add_user_message(user_content)
+            .build_chat_messages()
+        )
         
         yield from self._stream_response(messages, model, temperature, stream)
     
@@ -366,10 +368,12 @@ For each finding, include:
 - Suggested fix
 """
         
-        messages = [
-            MessageBuilder.build_system_message(system_prompt),
-            MessageBuilder.build_user_message(user_content)
-        ]
+        messages = (
+            MessageBuilder()
+            .add_system_message(system_prompt)
+            .add_user_message(user_content)
+            .build_chat_messages()
+        )
         
         yield from self._stream_response(messages, model, temperature, stream)
     
@@ -422,10 +426,12 @@ Format each suggestion as:
 - [benefit 2]
 """
         
-        messages = [
-            MessageBuilder.build_system_message(system_prompt),
-            MessageBuilder.build_user_message(user_content)
-        ]
+        messages = (
+            MessageBuilder()
+            .add_system_message(system_prompt)
+            .add_user_message(user_content)
+            .build_chat_messages()
+        )
         
         yield from self._stream_response(messages, model, temperature, stream)
     
@@ -476,10 +482,12 @@ Please provide:
 Be specific about line numbers and provide working code examples.
 """
         
-        messages = [
-            MessageBuilder.build_system_message(system_prompt),
-            MessageBuilder.build_user_message(user_content)
-        ]
+        messages = (
+            MessageBuilder()
+            .add_system_message(system_prompt)
+            .add_user_message(user_content)
+            .build_chat_messages()
+        )
         
         yield from self._stream_response(messages, model, temperature, stream)
     
@@ -529,10 +537,12 @@ The code should be:
 - Have clear variable names
 """
         
-        messages = [
-            MessageBuilder.build_system_message(system_prompt),
-            MessageBuilder.build_user_message(user_content)
-        ]
+        messages = (
+            MessageBuilder()
+            .add_system_message(system_prompt)
+            .add_user_message(user_content)
+            .build_chat_messages()
+        )
         
         yield from self._stream_response(messages, model, temperature, stream)
     
@@ -582,10 +592,12 @@ Requirements:
 {'- Focus on high code coverage and edge cases' if coverage else ''}
 """
         
-        messages = [
-            MessageBuilder.build_system_message(system_prompt),
-            MessageBuilder.build_user_message(user_content)
-        ]
+        messages = (
+            MessageBuilder()
+            .add_system_message(system_prompt)
+            .add_user_message(user_content)
+            .build_chat_messages()
+        )
         
         yield from self._stream_response(messages, model, temperature, stream)
     
@@ -633,10 +645,12 @@ Requirements:
 - Note any assumptions or limitations
 """
         
-        messages = [
-            MessageBuilder.build_system_message(system_prompt),
-            MessageBuilder.build_user_message(user_content)
-        ]
+        messages = (
+            MessageBuilder()
+            .add_system_message(system_prompt)
+            .add_user_message(user_content)
+            .build_chat_messages()
+        )
         
         yield from self._stream_response(messages, model, temperature, stream)
     

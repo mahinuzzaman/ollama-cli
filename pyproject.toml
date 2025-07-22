@@ -1,0 +1,67 @@
+[build-system]
+requires = ["setuptools>=61.0", "setuptools-scm"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "olla-cli"
+dynamic = ["version"]
+authors = [
+    {name = "Mahinuzzaman", email = "mahinuzzaman@example.com"},
+]
+description = "Your AI-Powered Coding Assistant in the Terminal"
+readme = "README.md"
+license = {text = "MIT"}
+requires-python = ">=3.8"
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "Topic :: Software Development :: Code Generators",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+]
+dependencies = [
+    "click>=8.0.0",
+    "pyyaml>=6.0",
+    "ollama>=0.2.0",
+    "aiohttp>=3.8.0",
+    "prompt_toolkit>=3.0.0",
+    "pygments>=2.0.0",
+    "rich>=13.0.0",
+    "pyperclip>=1.8.0",
+    "markdown>=3.4.0",
+]
+
+[project.urls]
+"Bug Tracker" = "https://github.com/mahinuzzaman/ollama-cli/issues"
+"Source Code" = "https://github.com/mahinuzzaman/ollama-cli"
+
+[project.scripts]
+olla-cli = "olla_cli.cli:cli"
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=6.0",
+    "pytest-cov>=3.0",
+    "pytest-mock>=3.6",
+    "flake8>=3.9",
+    "black>=22.0",
+    "isort>=5.0",
+    "mypy>=0.900",
+    "tox>=3.20",
+    "ruff>=0.1.0",
+]
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+packages = ["olla_cli"]
+include-package-data = true
+
+[tool.setuptools.dynamic]
+version = {attr = "olla_cli.__version__"}

@@ -126,6 +126,18 @@ source venv/bin/activate
 pip install -e .
 ```
 
+## 📚 Documentation
+
+For comprehensive documentation, visit the [docs/](./docs/) directory:
+
+| Document | Description |
+|----------|-------------|
+| [📖 Complete Documentation](./docs/README.md) | Main documentation index |
+| [🚀 Quick Start Guide](./docs/quick-start.md) | 5-minute setup guide |
+| [📚 API Reference](./docs/api-reference.md) | Complete command reference |
+| [🎯 Examples & Workflows](./docs/examples.md) | Real-world usage examples |
+| [🔧 Troubleshooting](./docs/troubleshooting.md) | Common issues and solutions |
+
 ## 🔗 Links
 
 - 🐛 **Bug Reports**: [GitHub Issues](https://github.com/mahinuzzaman/ollama-cli/issues)

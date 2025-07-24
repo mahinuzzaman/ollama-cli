@@ -14,6 +14,7 @@ from .config_commands import config
 from .model_commands import models
 from .code_commands import explain, review, refactor, debug, generate, test, document
 from .task_commands import task, resume, tasks
+from .intelligent_cli import smart, ask
 
 
 @click.group()
@@ -30,6 +31,12 @@ def main(ctx, model: Optional[str], temperature: Optional[float], context_length
     
     Use Olla CLI to explain, review, refactor, debug, generate, test, and document code
     using local language models through Ollama.
+    
+    Examples:
+      olla-cli explain main.py
+      olla-cli "explain this Python code"
+      olla-cli "create a REST API for user management"
+      olla-cli chat --claude-mode  # Interactive Claude-like mode
     """
     ctx.ensure_object(dict)
     
@@ -93,9 +100,17 @@ def version():
 @main.command()
 @click.option('--session', '-s', help='Load a specific session by ID or name')
 @click.option('--new-session', is_flag=True, help='Force create a new session')
+@click.option('--claude-mode', is_flag=True, help='Use Claude-like intelligent processing')
 @click.pass_context
-def chat(ctx, session: Optional[str], new_session: bool):
+def chat(ctx, session: Optional[str], new_session: bool, claude_mode: bool):
     """Start interactive chat mode with conversation history."""
+    
+    if claude_mode:
+        # Use the new intelligent CLI system
+        ctx.invoke(smart, request=None, debug=False, health=False, interactive=True)
+        return
+    
+    # Original REPL mode
     try:
         from ..ui import InteractiveREPL
     except ImportError as e:
@@ -149,3 +164,7 @@ main.add_command(document)
 main.add_command(task)
 main.add_command(resume)
 main.add_command(tasks)
+
+# Register intelligent commands
+main.add_command(smart)
+main.add_command(ask)

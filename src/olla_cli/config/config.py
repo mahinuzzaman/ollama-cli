@@ -28,7 +28,7 @@ class Config:
     def _create_default_config(self) -> Dict[str, Any]:
         """Create default configuration."""
         default_config = {
-            "model": "codellama",
+            "model": "deepseek-coder:33b",
             "temperature": 0.7,
             "context_length": 4096,
             "api_url": "http://localhost:11434",

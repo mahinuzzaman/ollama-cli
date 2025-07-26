@@ -46,7 +46,8 @@ class ToolCapability:
             'file_write': ['write_file'],
             'file_list': ['list_files'],
             'web_fetch': ['fetch_url'],
-            'web_search': ['search_web']
+            'web_search': ['search_web'],
+            'task_complex': ['generate_code', 'write_file']  # Complex tasks can use both capabilities
         }
         
         # Check if this capability matches the intent
@@ -310,32 +311,72 @@ Generate only the code, no explanations:"""
 
         try:
             logger.debug(f"Calling Ollama with prompt length: {len(prompt)}")
-            # Use codellama for better code generation
-            response = ollama.generate(
-                model='codellama:latest',
-                prompt=prompt,
-                options={
-                    'temperature': 0.1,  # Lower temperature for more consistent code
-                    'top_p': 0.9,
-                    'stop': ['```']  # Stop at code block markers
-                }
-            )
+            # Use codellama for code generation (faster and more reliable)
+            model_name = 'codellama:latest'
+            logger.debug(f"Using model: {model_name}")
+            
+            import asyncio
+            # Add timeout to prevent hanging
+            async def generate_with_timeout():
+                loop = asyncio.get_event_loop()
+                return await loop.run_in_executor(
+                    None, 
+                    lambda: ollama.generate(
+                        model=model_name,
+                        prompt=prompt,
+                        options={
+                            'temperature': 0.1,  # Lower temperature for more consistent code
+                            'top_p': 0.9,
+                        }
+                    )
+                )
+            
+            try:
+                response = await asyncio.wait_for(generate_with_timeout(), timeout=30.0)
+            except asyncio.TimeoutError:
+                logger.warning("Ollama generation timed out, using fallback")
+                raise Exception("Ollama generation timed out")
             
             logger.debug(f"Ollama raw response length: {len(response.get('response', ''))}")
             code = response['response'].strip()
             logger.debug(f"Code after strip: {len(code)} chars, preview: {code[:100]}")
             
-            # Clean up the response - remove markdown formatting if present
-            if code.startswith('```'):
-                lines = code.split('\n')
-                # Remove first line if it's markdown language marker
-                if len(lines) > 1 and lines[0].startswith('```'):
-                    lines = lines[1:]
-                # Remove last line if it's closing markdown
-                if len(lines) > 1 and lines[-1].strip() == '```':
-                    lines = lines[:-1]
-                code = '\n'.join(lines)
-                logger.debug(f"Code after markdown cleanup: {len(code)} chars")
+            # Clean up the response - remove markdown formatting and explanatory text
+            lines = code.split('\n')
+            
+            # Remove markdown code block markers and non-code text
+            cleaned_lines = []
+            in_code_block = False
+            found_code_start = False
+            
+            for line in lines:
+                stripped_line = line.strip()
+                
+                # Skip markdown markers
+                if stripped_line.startswith('```'):
+                    in_code_block = not in_code_block
+                    continue
+                elif stripped_line == '```':
+                    in_code_block = False
+                    continue
+                
+                # Detect start of actual code (function, class, import, etc.)
+                if (stripped_line.startswith(('def ', 'class ', 'import ', 'from ', '#')) or
+                    (stripped_line and not stripped_line[0].isupper() and '=' in stripped_line)):
+                    found_code_start = True
+                
+                # Stop at explanatory text after code
+                if (found_code_start and stripped_line and 
+                    (stripped_line.startswith(('This code', 'The function', 'Example usage:', 'Usage:', 'Output:')) or
+                     (stripped_line[0].isupper() and len(stripped_line.split()) > 5))):
+                    break
+                
+                # Include the line if we're in a code context or it's actual code
+                if in_code_block or found_code_start or stripped_line.startswith(('def ', 'class ', 'import ', 'from ', '#')):
+                    cleaned_lines.append(line)
+            
+            code = '\n'.join(cleaned_lines).rstrip()
+            logger.debug(f"Code after markdown cleanup: {len(code)} chars")
             
             return code
             

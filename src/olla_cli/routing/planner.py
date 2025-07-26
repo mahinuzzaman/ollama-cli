@@ -5,6 +5,7 @@ from dataclasses import dataclass, field
 from enum import Enum
 import asyncio
 import logging
+import re
 
 from .intent import Intent, IntentType
 from ..mcp.tools import ToolInterface, ToolCapability, ToolResult
@@ -233,7 +234,7 @@ class ExecutionPlanner:
                     logger.debug(f"Step {step.id} result: success={result.success}, has_data={bool(result.data)}, data_repr={repr(result.data)[:200]}")
                     
                     # Update context with results for subsequent steps
-                    if result.success and result.data:
+                    if result.success and result.data is not None:
                         context_key = f"step_{step.id}_result"
                         plan.context[context_key] = result.data
                         logger.debug(f"Added to context: {context_key} = {str(result.data)[:100]}...")
@@ -250,7 +251,26 @@ class ExecutionPlanner:
         """Create a multi-step plan for complex tasks."""
         plan = ExecutionPlan(id=plan_id, intent=intent)
         
-        # Example: Complex task might involve file operations + code analysis
+        # Check if this is a code creation task (function, class, module, etc.)
+        create_code_patterns = [
+            r'\bcreate\s+.*\b(function|class|module|script|program)\b',
+            r'\bgenerate\s+.*\b(function|class|module|script|program)\b',
+            r'\bmake\s+.*\b(function|class|module|script|program)\b'
+        ]
+        
+        is_code_creation = any(re.search(pattern, intent.raw_input, re.IGNORECASE) 
+                              for pattern in create_code_patterns)
+        
+        if is_code_creation:
+            # Auto-generate filename if not provided
+            filename = self._extract_filename(intent.raw_input)
+            if not filename:
+                filename = self._generate_filename_from_intent(intent)
+            
+            # Create code-to-file plan for function/class creation
+            return await self._create_code_to_file_plan_with_filename(intent, available_tools, plan_id, filename)
+        
+        # Original complex plan logic for other tasks
         file_tools = [(tool, cap) for tool, cap in available_tools if cap.tool_type.value == 'filesystem']
         code_tools = [(tool, cap) for tool, cap in available_tools if cap.tool_type.value == 'code_analysis']
         
@@ -448,6 +468,77 @@ class ExecutionPlanner:
             plan.add_step(save_step)
         
         return plan
+    
+    async def _create_code_to_file_plan_with_filename(self, intent: Intent, available_tools: List[tuple], plan_id: str, filename: str) -> ExecutionPlan:
+        """Create a plan that generates code and saves it to a specific file."""
+        plan = ExecutionPlan(id=plan_id, intent=intent)
+        
+        # Find code analysis and filesystem tools
+        code_tools = [(tool, cap) for tool, cap in available_tools 
+                     if cap.tool_type.value == 'code_analysis' and cap.name == 'generate_code']
+        file_tools = [(tool, cap) for tool, cap in available_tools 
+                     if cap.tool_type.value == 'filesystem' and cap.name == 'write_file']
+        
+        # Step 1: Generate code
+        if code_tools:
+            tool, capability = code_tools[0]
+            generate_step = ExecutionStep(
+                id=f"{plan_id}_001",
+                tool=tool,
+                capability=capability,
+                parameters=self._prepare_parameters(intent, capability)
+            )
+            plan.add_step(generate_step)
+        
+        # Step 2: Save to file (depends on code generation)
+        if file_tools and filename:
+            tool, capability = file_tools[0]
+            save_step = ExecutionStep(
+                id=f"{plan_id}_002",
+                tool=tool,
+                capability=capability,
+                parameters={
+                    'file_path': filename,
+                    'content': '${step_' + f"{plan_id}_001" + '_result}'  # Reference to previous step result
+                },
+                dependencies=[f"{plan_id}_001"]
+            )
+            plan.add_step(save_step)
+        
+        return plan
+    
+    def _generate_filename_from_intent(self, intent: Intent) -> str:
+        """Generate a filename based on the intent content."""
+        raw_input = intent.raw_input.lower()
+        
+        # Extract common function/class names for filename generation
+        if 'hello' in raw_input and ('world' in raw_input or 'function' in raw_input):
+            return 'hello_world.py'
+        elif 'calculator' in raw_input:
+            return 'calculator.py' 
+        elif 'factorial' in raw_input:
+            return 'factorial.py'
+        elif 'fibonacci' in raw_input:
+            return 'fibonacci.py'
+        elif 'todo' in raw_input and 'react' in raw_input:
+            return 'TodoApp.js'
+        elif 'react' in raw_input and 'app' in raw_input:
+            return 'App.js'
+        elif 'react' in raw_input:
+            return 'Component.js'
+        elif 'class' in raw_input:
+            return 'my_class.py'
+        elif 'function' in raw_input:
+            return 'my_function.py'
+        elif 'script' in raw_input:
+            return 'script.py'
+        elif 'program' in raw_input:
+            return 'program.py'
+        elif 'app' in raw_input or 'application' in raw_input:
+            return 'app.py'
+        else:
+            # Default filename
+            return 'generated_code.py'
     
     def get_plan_status(self, plan_id: str) -> Optional[Dict[str, Any]]:
         """Get status of an execution plan."""

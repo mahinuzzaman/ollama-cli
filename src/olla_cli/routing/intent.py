@@ -89,9 +89,9 @@ class IntentClassifier:
                 (r'^review\s+', 0.5),
             ],
             IntentType.CODE_GENERATE: [
-                (r'\b(create|generate|write|build|make)\b.*\b(code|function|class|app|component)\b', 0.3),
-                (r'^(create|generate|write|build)\s+', 0.4),
-                (r'\b(implement|develop)\b', 0.2),
+                (r'\b(create|generate|write|build|make)\b.*\bcode\b(?!.*\b(react|vue|angular|app)\b)', 0.3),  # Code but not frameworks/apps
+                (r'^(create|generate|write|build)\s+.*\bcode\b(?!.*\b(react|vue|angular|app)\b)', 0.4),  # Code but not frameworks/apps
+                (r'\b(implement|develop)\b.*\bcode\b(?!.*\b(react|vue|angular|app)\b)', 0.2),  # Code but not frameworks/apps
             ],
             IntentType.CODE_REFACTOR: [
                 (r'\b(refactor|improve|optimize|clean|restructure)\b', 0.4),
@@ -143,6 +143,14 @@ class IntentClassifier:
                 (r'\bcreate\s+.*\bfile\s+.*(with|containing).*\b(function|class|code)\b', 0.6),
                 (r'\bmake\s+.*\bfile\s+.*\bcontaining\b', 0.5),
                 (r'\b(generate|create)\s+.*\band\s+(save|write|create)', 0.4),
+                (r'\b(create|generate|build|make)\s+.*\.(py|js|ts|java|cpp|c|h|go|rs|php|rb|txt|md|json|yaml|yml|toml|html|css)\b', 0.7),
+                (r'\bcreate\s+.*\bfile\s+(called|named)\s+.*\.(py|js|ts|java|cpp)\b', 0.8),
+                (r'\b(write|create|generate)\s+.*\bcode\s+.*\b(to|in|into)\s+.*\.(py|js|ts|java)\b', 0.7),
+                (r'\b(implement|develop|build)\s+.*\band\s+(save|write|create|put).*\bfile\b', 0.6),
+                (r'\bcreate\s+.*\b(function|class|module|script|program)\b', 0.7),  # Auto-create files for functions/classes
+                (r'\bcreate\s+.*\b(app|application)\b', 0.9),  # App creation
+                (r'\bcreate\s+.*\b(react|vue|angular|next|nodejs|express)\b', 1.0),  # Framework apps
+                (r'\b(todo|task)\s+.*\b(react|app)\b', 1.0),  # Todo/task apps
             ],
             IntentType.CONFIG_MANAGE: [
                 (r'\b(config|configuration|settings?|preferences?)\b', 0.3),

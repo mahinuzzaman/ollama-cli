@@ -18,17 +18,13 @@ Olla CLI is a powerful command-line interface that brings AI coding assistance d
 
 ## ✨ Features
 
-- 🎯 **Intelligent Code Analysis**: Explain, review, and debug code with AI assistance
-- 🔄 **Code Generation**: Generate functions, classes, and complete programs from descriptions
-- 🧪 **Test Generation**: Automatically create comprehensive test suites
-- 📚 **Documentation**: Generate professional documentation for your code
-- 🎨 **Rich Terminal Output**: Beautiful syntax highlighting, tables, and formatting
-- 💬 **Interactive Mode**: Conversational REPL with session management
-- 🌈 **Themes**: Dark, light, and auto themes for different environments
-- 📄 **Export**: Save results as Markdown, HTML, or copy to clipboard
+- 🤖 **Interactive by Default**: Conversational AI assistant that starts immediately
+- 🔄 **Automatic Execution**: Multi-step task planning and automatic tool orchestration
+- 📁 **Smart File Creation**: Automatically creates and saves code to appropriately named files
+- 🎯 **Intent Classification**: Understands what you want to do from natural language
+- 💬 **Session Memory**: Maintains context throughout conversations
 - 🔍 **Context-Aware**: Intelligent project analysis and dependency tracking
 - ⚡ **Streaming Responses**: Real-time AI responses with progress indicators
-
 ## 📋 Requirements
 
 - **Python**: 3.8 or higher
@@ -63,67 +59,49 @@ ollama -v
 
 ### Basic Usage
 ```bash
-# Explain code
-olla-cli explain "def factorial(n): return 1 if n <= 1 else n * factorial(n-1)"
+# Start interactive mode (default behavior)
+olla-cli
 
-# Review a file
-olla-cli review myfile.py
+# Then just talk to your AI assistant:
+# You: create a todo react app
+# You: explain how this code works
+# You: review my authentication function
+# You: generate unit tests for my calculator
 
-# Generate code
-olla-cli generate "binary search algorithm in Python"
-
-# Interactive mode
-olla-cli chat
-
-# Get help
-olla-cli --help
+# Other commands
+olla-cli config show    # Manage configuration
+olla-cli version        # Show version
+olla-cli --help         # Get help
 ```
 
 ## 🛠️ Commands Overview
 
 | Command | Description |
 |---------|-------------|
-| `explain` | Explain code functionality and logic |
-| `review` | Review code for issues and improvements |
-| `refactor` | Get intelligent refactoring suggestions |
-| `debug` | Debug code issues with AI assistance |
-| `generate` | Generate code from descriptions |
-| `test` | Generate comprehensive test suites |
-| `document` | Generate professional documentation |
-| `chat` | Start interactive conversational mode |
-| `config` | Manage configuration settings |
-| `models` | Manage Ollama models |
+| `olla-cli` | Start interactive AI assistant (default) |
+| `olla-cli config` | Manage configuration settings |
+| `olla-cli version` | Show version information |
 
-## 🎯 Example Workflows
+### 🎯 Interactive Mode Capabilities
 
-### Code Review
-```bash
-# Review with specific focus
-olla-cli review --focus security auth.py
+Once in interactive mode, you can:
+- **Code Generation**: "create a hello world function", "build a React todo app"
+- **Code Analysis**: "explain this code", "review my function for bugs"
+- **File Operations**: "read this file", "save the code to calculator.py"
+- **Complex Tasks**: "create a REST API with authentication"
+- **Project Help**: "analyze my codebase", "suggest improvements"
 
-# Get refactoring suggestions
-olla-cli refactor --type optimize slow_function.py
-```
 
-### Development
-```bash
-# Generate code structure
-olla-cli generate --template class "user authentication manager"
-
-# Create tests
-olla-cli test --framework pytest auth_manager.py
-
-# Generate docs
-olla-cli document --format google auth_manager.py
-```
-
-### Quick Development Setup
+### Development Setup
 ```bash
 git clone https://github.com/mahinuzzaman/ollama-cli.git
 cd ollama-cli
 python -m venv venv
 source venv/bin/activate
 pip install -e .
+
+# Start using immediately
+olla-cli
 ```
 
 ## 📚 Documentation
@@ -135,7 +113,6 @@ For comprehensive documentation, visit the [docs/](./docs/) directory:
 | [📖 Complete Documentation](./docs/README.md) | Main documentation index |
 | [🚀 Quick Start Guide](./docs/quick-start.md) | 5-minute setup guide |
 | [📚 API Reference](./docs/api-reference.md) | Complete command reference |
-| [🎯 Examples & Workflows](./docs/examples.md) | Real-world usage examples |
 | [🔧 Troubleshooting](./docs/troubleshooting.md) | Common issues and solutions |
 
 ## 🔗 Links

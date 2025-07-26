@@ -1,37 +1,47 @@
 # 📖 Olla CLI Documentation
 
-Complete documentation for Olla CLI - Your AI-Powered Coding Assistant.
+Complete documentation for Olla CLI - Your Interactive AI Coding Assistant.
+
+## 🤖 What is Olla CLI?
+
+Olla CLI is a conversational AI coding assistant that runs in interactive mode by default. Just run `olla-cli` and start talking to your AI assistant in natural language - no commands to remember!
 
 ## 📚 Documentation
 
 | Document | Description |
 |----------|-------------|
-| [🚀 Quick Start](./quick-start.md) | 5-minute setup guide |
-| [📚 API Reference](./api-reference.md) | Complete command reference |
-| [🎯 Examples](./examples.md) | Real-world usage examples |
+| [🚀 Quick Start](./quick-start.md) | Get started in 2 minutes |
+| [🎯 Interactive Mode Guide](./interactive-mode.md) | Complete interactive usage guide |
+| [📚 API Reference](./api-reference.md) | Available commands and options |
 | [🔧 Troubleshooting](./troubleshooting.md) | Common issues and solutions |
 
-## 🎯 Quick Reference
+## ⚡ Quick Start
 
-### Essential Commands
-| Command | Purpose | Example |
-|---------|---------|---------|
-| `explain` | Understand code | `olla-cli explain script.py` |
-| `review` | Code quality check | `olla-cli review --focus security auth.py` |
-| `generate` | Create code | `olla-cli generate "sorting algorithm"` |
-| `test` | Generate tests | `olla-cli test --framework pytest utils.py` |
-| `chat` | Interactive mode | `olla-cli chat` |
+```bash
+# Install
+pip install olla-cli
 
-### Configuration Basics
-| Setting | Purpose | Command |
-|---------|---------|---------|
-| Default model | Set preferred AI model | `olla-cli config set model codellama` |
-| Theme | Change output appearance | `olla-cli config set output.theme light` |
-| API URL | Use remote Ollama | `olla-cli config set api_url http://server:11434` |
+# Run (starts interactive mode immediately)
+olla-cli
 
-## 🆘 Getting Help
+# Start talking to your AI assistant:
+You: create a hello world function
+You: build a React todo app
+You: review my code for bugs
+You: exit
+```
 
-1. Check [Troubleshooting Guide](./troubleshooting.md)
-2. Review [Examples](./examples.md)
-3. Use built-in help: `olla-cli --help`
-4. Report issues: [GitHub Issues](https://github.com/mahinuzzaman/ollama-cli/issues)
+## 🛠️ Available Commands
+
+| Command | Description |
+|---------|-------------|
+| `olla-cli` | Start interactive AI assistant (default) |
+| `olla-cli config` | Manage configuration settings |
+| `olla-cli version` | Show version information |
+
+## 🔗 Links
+
+- 📦 [PyPI Package](https://pypi.org/project/olla-cli/)
+- 🐙 [GitHub Repository](https://github.com/mahinuzzaman/ollama-cli)
+- 🐛 [Report Issues](https://github.com/mahinuzzaman/ollama-cli/issues)
+- 💬 [Discussions](https://github.com/mahinuzzaman/ollama-cli/discussions)

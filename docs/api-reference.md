@@ -1,13 +1,14 @@
 # 📚 API Reference
 
-Complete reference for all Olla CLI commands and options.
+Complete reference for Olla CLI commands and options.
 
 ## 🌐 Global Options
 
 | Option | Short | Description | Example |
 |--------|-------|-------------|---------|
-| `--model` | `-m` | Override default model | `--model mistral` |
-| `--temperature` | `-t` | Set randomness (0.0-1.0) | `--temperature 0.8` |
+| `--model` | `-m` | Override default model | `--model deepseek-coder:33b` |
+| `--temperature` | `-t` | Set randomness (0.0-1.0) | `--temperature 0.3` |
+| `--context-length` | `-c` | Override context length | `--context-length 8192` |
 | `--verbose` | `-v` | Enable verbose output | `--verbose` |
 | `--theme` | | Set theme (dark/light/auto) | `--theme light` |
 | `--no-color` | | Disable colored output | `--no-color` |
@@ -15,147 +16,25 @@ Complete reference for all Olla CLI commands and options.
 
 ## 📖 Commands
 
-### `explain` - Code Explanation
+### Main Command (Interactive Mode)
 
 ```bash
-olla-cli explain [OPTIONS] [FILE_OR_CODE]
+olla-cli [OPTIONS]
 ```
 
-**Options:**
-- `--stdin` - Read from stdin
-- `--line-range` - Focus on specific lines (e.g., "10-20")
-- `--detail-level` - brief/normal/comprehensive
-- `--output-file` - Save to file
+**Default Behavior:** Starts interactive mode immediately
+
+**Options:** All global options apply
 
 **Examples:**
 ```bash
-olla-cli explain "def factorial(n): return 1 if n <= 1 else n * factorial(n-1)"
-olla-cli explain --line-range "10-25" script.py
-olla-cli explain --detail-level comprehensive --output-file explanation.md algorithm.py
+olla-cli                              # Start interactive mode
+olla-cli --model codellama            # Use specific model
+olla-cli --verbose                    # Show debug information
+olla-cli --theme light --no-color     # Customize appearance
 ```
 
-### `review` - Code Review
-
-```bash
-olla-cli review [OPTIONS] [FILE_OR_CODE]
-```
-
-**Options:**
-- `--focus` - security/performance/style/bugs/all
-- `--output-file` - Save review to file
-
-**Examples:**
-```bash
-olla-cli review --focus security auth_module.py
-olla-cli review --focus performance --output-file perf_review.md slow_function.py
-```
-
-### `refactor` - Code Refactoring
-
-```bash
-olla-cli refactor [OPTIONS] [FILE_OR_CODE]
-```
-
-**Options:**
-- `--type` - simplify/optimize/modernize/general
-- `--show-diff` - Show before/after comparison
-
-**Examples:**
-```bash
-olla-cli refactor --type optimize --show-diff performance_critical.py
-olla-cli refactor --type modernize old_python2_code.py
-```
-
-### `debug` - Debugging Assistant
-
-```bash
-olla-cli debug [OPTIONS] [FILE_OR_CODE]
-```
-
-**Options:**
-- `--error` - Error message or type
-- `--stack-trace` - Path to stack trace file
-- `--line-range` - Focus on specific lines
-
-**Examples:**
-```bash
-olla-cli debug --error "IndexError: list index out of range" buggy_script.py
-olla-cli debug --stack-trace error.log problematic_code.py
-```
-
-### `generate` - Code Generation
-
-```bash
-olla-cli generate [OPTIONS] DESCRIPTION
-```
-
-**Options:**
-- `--language` - Target language (python, javascript, etc.)
-- `--framework` - Specific framework
-- `--template` - function/class/api_endpoint
-- `--output-file` - Save to file
-
-**Examples:**
-```bash
-olla-cli generate "function to calculate fibonacci numbers"
-olla-cli generate --language javascript --framework react "todo list component"
-olla-cli generate --template class "binary search tree data structure"
-```
-
-### `test` - Test Generation
-
-```bash
-olla-cli test [OPTIONS] [FILE_OR_CODE]
-```
-
-**Options:**
-- `--framework` - pytest/unittest/jest/mocha
-- `--type` - unit/integration/e2e
-- `--coverage` - Include coverage analysis
-- `--output-file` - Save tests to file
-
-**Examples:**
-```bash
-olla-cli test calculator.py
-olla-cli test --framework jest --coverage math_utils.js
-olla-cli test --type integration --output-file test_integration.py api_client.py
-```
-
-### `document` - Documentation Generation
-
-```bash
-olla-cli document [OPTIONS] [FILE_OR_CODE]
-```
-
-**Options:**
-- `--format` - google/numpy/sphinx
-- `--type` - api/user/project
-- `--output-file` - Save to file
-
-**Examples:**
-```bash
-olla-cli document api_module.py
-olla-cli document --type user --format sphinx tutorial_code.py
-```
-
-### `chat` - Interactive Mode
-
-```bash
-olla-cli chat [OPTIONS]
-```
-
-**Options:**
-- `--session` - Load specific session
-- `--new-session` - Force create new session
-
-**Interactive Commands:**
-- `/help` - Show commands
-- `/clear` - Clear history
-- `/save [name]` - Save session
-- `/load <id>` - Load session
-- `/exit` - Exit chat
-
-### `config` - Configuration
+### `config` - Configuration Management
 
 ```bash
 olla-cli config COMMAND [OPTIONS]
@@ -164,66 +43,94 @@ olla-cli config COMMAND [OPTIONS]
 **Subcommands:**
 - `show [SECTION]` - Display configuration
 - `set KEY VALUE` - Set configuration value
-- `reset [SECTION]` - Reset configuration
+- `reset [SECTION]` - Reset configuration to defaults
 
 **Examples:**
 ```bash
-olla-cli config show
-olla-cli config set model mistral
-olla-cli config set output.theme light
-olla-cli config reset
+olla-cli config show                  # Show all settings
+olla-cli config show output           # Show output settings only
+olla-cli config set model codellama   # Set default model
+olla-cli config set output.theme dark # Set theme
+olla-cli config set temperature 0.5   # Set temperature
+olla-cli config reset                 # Reset all to defaults
 ```
 
-### `models` - Model Management
+**Configuration Keys:**
+- `model` - Default AI model name
+- `temperature` - Response randomness (0.0-1.0)
+- `context_length` - Maximum context window size
+- `api_url` - Ollama server URL
+- `output.theme` - Display theme (dark/light/auto)
+- `output.syntax_highlight` - Enable syntax highlighting
+- `output.show_progress` - Show progress indicators
+
+### `version` - Version Information
 
 ```bash
-olla-cli models COMMAND [OPTIONS]
+olla-cli version
 ```
 
-**Subcommands:**
-- `list` - List available models
-- `info MODEL_NAME` - Show model information
-- `pull MODEL_NAME` - Download model
+Shows the current version of Olla CLI.
 
-**Examples:**
+## 🎯 Interactive Mode Commands
+
+Once in interactive mode, you can use natural language requests:
+
+### Code Generation
 ```bash
-olla-cli models list
-olla-cli models info codellama
-olla-cli models pull mistral
+You: create a hello world function
+You: build a React todo app
+You: generate a Python calculator with basic operations
+You: make a REST API for user management
 ```
 
-### `task` - Task Management
-
+### Code Analysis
 ```bash
-olla-cli task [OPTIONS] DESCRIPTION
+You: explain this code: [paste code here]
+You: review my authentication function for security issues
+You: check this file for bugs: filename.py
+You: suggest improvements to my sorting algorithm
 ```
 
-**Options:**
-- `--dry-run` - Show what would be done
-- `--auto-confirm` - Auto-confirm all steps
-
-**Examples:**
+### File Operations
 ```bash
-olla-cli task "refactor this Python file to use type hints"
-olla-cli task --dry-run "optimize database queries"
+You: read the config file
+You: save this code to calculator.py
+You: create a new component called UserCard
+You: show me the contents of main.py
 ```
+
+### Complex Tasks
+```bash
+You: create a complete web app with authentication
+You: build a project structure for a Python CLI tool
+You: generate unit tests for all my functions
+You: create documentation for my API endpoints
+```
+
+### Session Control
+```bash
+You: exit                    # Exit interactive mode
+```
+
+Or use `Ctrl+C` to interrupt at any time.
 
 ## 🌍 Environment Variables
 
-| Variable | Description | Example |
-|----------|-------------|---------|
-| `OLLA_MODEL` | Default model | `export OLLA_MODEL=mistral` |
-| `OLLA_TEMPERATURE` | Default temperature | `export OLLA_TEMPERATURE=0.8` |
-| `OLLA_API_URL` | Ollama API URL | `export OLLA_API_URL=http://localhost:11434` |
-| `OLLA_THEME` | Output theme | `export OLLA_THEME=light` |
-| `OLLA_NO_COLOR` | Disable colors | `export OLLA_NO_COLOR=1` |
+| Variable | Description | Default | Example |
+|----------|-------------|---------|---------|
+| `OLLA_MODEL` | Default model | `deepseek-coder:33b` | `export OLLA_MODEL=codellama` |
+| `OLLA_TEMPERATURE` | Default temperature | `0.7` | `export OLLA_TEMPERATURE=0.5` |
+| `OLLA_API_URL` | Ollama API URL | `http://localhost:11434` | `export OLLA_API_URL=http://server:11434` |
+| `OLLA_THEME` | Output theme | `dark` | `export OLLA_THEME=light` |
+| `OLLA_NO_COLOR` | Disable colors | `false` | `export OLLA_NO_COLOR=1` |
 
 ## 📝 Configuration File
 
 Configuration is stored at `~/.olla-cli/config.yaml`:
 
 ```yaml
-model: "codellama"
+model: "deepseek-coder:33b"
 temperature: 0.7
 context_length: 4096
 api_url: "http://localhost:11434"
@@ -231,20 +138,96 @@ api_url: "http://localhost:11434"
 output:
   theme: "dark"
   syntax_highlight: true
-  streaming: true
-
-interactive:
-  auto_save: true
-  max_history: 1000
+  show_line_numbers: true
+  wrap_text: true
+  show_progress: true
+  enable_pager: true
+  max_width: null
+  custom_colors: {}
 ```
+
+## 🧠 Intelligent Processing
+
+Olla CLI uses advanced natural language processing:
+
+### Intent Classification
+Automatically identifies what you want to do:
+- **Code Generation** - Creating new code
+- **Code Analysis** - Explaining or reviewing code
+- **File Operations** - Reading, writing, managing files
+- **Complex Tasks** - Multi-step operations
+
+### Task Planning
+Breaks down complex requests:
+1. **Single Step** - Simple operations
+2. **Multi Step** - Complex tasks requiring multiple actions
+3. **Parallel** - Independent operations run simultaneously
+4. **Sequential** - Dependent operations run in order
+
+### Tool Orchestration
+Automatically selects and uses appropriate tools:
+- **Code Analysis** - For understanding and reviewing code
+- **File System** - For reading and writing files
+- **Web Tools** - For fetching external resources (future)
+
+### Context Management
+Maintains conversation context:
+- **Session Memory** - Remembers what was discussed
+- **File Awareness** - Tracks created and modified files
+- **Project Context** - Understands project structure
 
 ## 🔧 Return Codes
 
-| Code | Description |
-|------|-------------|
-| 0 | Success |
-| 1 | General error |
-| 2 | Invalid arguments |
-| 3 | Configuration error |
-| 4 | Connection error |
-| 5 | Model not found |
+| Code | Description | Meaning |
+|------|-------------|---------|
+| 0 | Success | Operation completed successfully |
+| 1 | General error | Unexpected error occurred |
+| 2 | Invalid arguments | Command line arguments invalid |
+| 3 | Configuration error | Config file or settings issue |
+| 4 | Connection error | Cannot connect to Ollama server |
+| 5 | Model not found | Requested AI model not available |
+
+## 🎛️ Advanced Usage
+
+### Model Selection Priority
+1. Command line `--model` option
+2. Environment variable `OLLA_MODEL`
+3. Configuration file setting
+4. Default: `deepseek-coder:33b`
+
+### Temperature Settings
+- **0.0-0.3**: Very deterministic, good for code generation
+- **0.4-0.7**: Balanced creativity and consistency
+- **0.8-1.0**: More creative, less predictable
+
+### Context Length
+- **4096**: Standard, good for most tasks
+- **8192**: Extended context for larger code files
+- **16384**: Maximum context for complex projects
+
+### Debug Mode
+Use `--verbose` to see:
+- Intent classification results
+- Execution plan details
+- Tool selection process
+- File operation logs
+- Error details and stack traces
+
+## 🔍 Troubleshooting Commands
+
+```bash
+# Check configuration
+olla-cli config show
+
+# Test with verbose output
+olla-cli --verbose
+
+# Check version
+olla-cli version
+
+# Reset configuration
+olla-cli config reset
+
+# Get help
+olla-cli --help
+```
